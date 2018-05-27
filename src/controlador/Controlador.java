@@ -26,8 +26,16 @@ public class Controlador {
     public void espera(){
         game.espera();
     }
-    public void preparar(int mat[][]){
-        game.preparar(mat);
-    }
    
+    public void apontar(int x,int y, int tipo){
+        game.apontar(x,y, tipo);
+    }
+    
+    public Boolean toPronto(){
+        return game.toPronto();
+    }
+    
+    public Integer fogo(int x, int y){
+        return game.fogo(x,y);
+    }
 }

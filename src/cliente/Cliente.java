@@ -21,11 +21,11 @@ import respostas.Mensagem;
  *
  * @author gabriel
  */
-public class Cliente
-{
-    private ObjectInputStream entrada;
-    private ObjectOutputStream saida;
-    private String user;
+public class Cliente implements Runnable{
+
+    private DataInputStream entrada;
+    private DataOutputStream saida;
+    private String jog;
     private int porta;
     private String ip;
     
@@ -35,27 +35,34 @@ public class Cliente
     }
     
     public static void main(String[] args) {
-        
+
             // TODO code application logic here
         GameLogin log = new GameLogin();
         log.setLocationRelativeTo(null);
         log.setVisible(true);
         
+        int code;
         //ClienteBN cliente = new ClienteBN("localhost", 55555);
         
         
     }
+
+    public void run(){
+        
+    }
     
+    public void cancelar(Boolean a){
+        
+    }
     public Boolean conectar(String ip, int porta,String user){
         try{
             this.socket = new Socket(ip, porta);
             this.ip = ip;
             this.porta = porta;
-            this.user = user;
+            this.jog = user;
             
-            entrada = new ObjectInputStream(socket.getInputStream());
-            saida = new ObjectOutputStream(socket.getOutputStream());
-            
+            entrada = new DataInputStream(socket.getInputStream());
+            saida = new DataOutputStream(socket.getOutputStream());
             
         }catch(IOException ex){
             JOptionPane.showMessageDialog(null, "Erro de Exceção, entrada e saida (CLIENTE)");
@@ -67,12 +74,11 @@ public class Cliente
 
  
     public Boolean fila(){
-        int code;
-        
+        int code1, code2;
         try {
             saida.writeInt(Mensagem.jogar);
-            code = entrada.readInt();
-            System.out.println(code);
+            code1 = entrada.readInt();
+            code1 = entrada.readInt();
             return true;
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,7 +92,6 @@ public class Cliente
         try {
             //Scanner scan = new Scanner(entrada);
             code = entrada.readInt();
-            System.out.println(code);
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -101,18 +106,69 @@ public class Cliente
             System.out.println(ex.getMessage());
         }
     }
-
-     public void preparar(int mat[][]){
-         int code;
-         try {
+    
+    
+    public void apontar(int x, int y, int tipo){
+        try{
+            saida.writeInt(Mensagem.posicionar);
+            saida.writeInt(tipo);
+            saida.writeInt(x);
+            saida.writeInt(y);
+            int ok = entrada.readInt();
+            System.out.println(ok);
+        }
+        catch(IOException e){
+            
+        }
+    }
+    
+    
+    public Boolean toPronto(){
+        try {
             saida.writeInt(Mensagem.prontoJogar);
-            code = entrada.readInt();
-            System.out.println(code);
-            saida.writeObject(mat);
+            entrada.readInt();
+            entrada.readInt();
+            return true;
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-     }   
+        return false;
+    }
     
+    public Integer fogo(int x, int y){
+        try{
+            if(!verificarVez()){
+                JOptionPane.showMessageDialog(null,"Não é Sua vez de Jogar!");
+                return null;
+            }
+            
+            saida.writeInt(Mensagem.coordenadas);
+            saida.writeInt(x);
+            saida.writeInt(y);
+            int aux = entrada.readInt();
+            if(aux == Mensagem.coordendasVencedor){
+                return 2;
+            }
+            else if(aux == Mensagem.coordenadasSucesso){
+                return 1;
+            }
+            else{
+                return 0;
+            }
+            
+        }catch(Exception e){
+            
+        }
+        return 0;
+    }
     
+    private Boolean verificarVez(){
+        try {
+            saida.writeInt(Mensagem.jogarAguardar);
+            return entrada.readInt() == Mensagem.jogar;
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }
