@@ -38,4 +38,8 @@ public class Controlador {
     public Integer fogo(int x, int y){
         return game.fogo(x,y);
     }
+    
+    public Boolean verificarVez(){
+        return game.verificarVez();
+    }
 }

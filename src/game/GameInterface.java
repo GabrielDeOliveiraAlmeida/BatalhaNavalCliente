@@ -73,6 +73,7 @@ public class GameInterface extends javax.swing.JFrame {
         y1 = new javax.swing.JTextField();
         fogo = new javax.swing.JButton();
         alerta = new javax.swing.JLabel();
+        vez = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -262,13 +263,14 @@ public class GameInterface extends javax.swing.JFrame {
 
         alerta.setText("jLabel6");
 
+        vez.setText("jLabel6");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -279,14 +281,18 @@ public class GameInterface extends javax.swing.JFrame {
                         .addComponent(y1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(fogo))
-                    .addComponent(alerta))
-                .addGap(0, 126, Short.MAX_VALUE))
+                    .addComponent(alerta)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(vez))
+                .addGap(0, 301, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(vez)
+                .addGap(9, 9, 9)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(x1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(y1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -316,8 +322,10 @@ public class GameInterface extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-
+        //Carregando load = new Carregando(this, true);
+        //load.setVisible(true);
         if(control.fila()){
+            //load.dispose();
             CardLayout c = (CardLayout) root.getLayout();
             c.show(root, "posicionar");
             lb1.setText(printar());
@@ -435,12 +443,20 @@ public class GameInterface extends javax.swing.JFrame {
         lb1.setText(printar());
 //        if(!portaaviao.isVisible() && !submarino.isVisible() && !cruzador.isVisible()
 //                && !couracado.isVisible()){
+        verificaPronto();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void verificaPronto(){
         if(barcos == 2 ) { 
             lb1.setText(printar());
             novoJogo(control.toPronto());
+            if(control.verificarVez()){
+                vez.setText("Sua Vez de Jogar");
+            }else{
+                vez.setText("Não é sua vez de Jogar");
+            }
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
-
+    }
     private void xFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_xFocusGained
         // TODO add your handling code here:
         x.setText("");
@@ -453,16 +469,24 @@ public class GameInterface extends javax.swing.JFrame {
 
     private void x1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_x1FocusGained
         // TODO add your handling code here:
+        x1.setText("");
     }//GEN-LAST:event_x1FocusGained
 
     private void y1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_y1FocusGained
         // TODO add your handling code here:
+        y1.setText("");
     }//GEN-LAST:event_y1FocusGained
 
     private void fogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fogoActionPerformed
         // TODO add your handling code here:
         int x;
         int y;
+        if(control.verificarVez()){
+                vez.setText("Sua Vez de Jogar");
+        }else{
+                vez.setText("Não é sua vez de Jogar");
+                return;
+        }
         try{
             x = Integer.parseInt(x1.getText());
             y = Integer.parseInt(y1.getText());
@@ -479,18 +503,21 @@ public class GameInterface extends javax.swing.JFrame {
             return;
         }
         Integer aux = control.fogo(x,y);
-        if(aux == 2){
-            JOptionPane.showMessageDialog(null, "Você Venceu");
-        }else if(aux == 1){
-            tabuleiro[x][y] = 'O';
-            alerta.setText("Acertou Mizeravi");
-        }else if(aux == 0){
-            alerta.setText("ERROU!");
-            tabuleiro[x][y]='X';
-        }
-        
-        lb3.setText(printarChar());
-        
+        //if(aux !=null){
+            if (aux == 2) {
+                JOptionPane.showMessageDialog(null, "Você Venceu");
+            } else if (aux == 1) {
+                tabuleiro[x][y] = '1';
+                alerta.setText("Acertou Mizeravi");
+                vez.setText("Sua vez de Jogar");
+            } else if (aux == 0) {
+                alerta.setText("ERROU!");
+                tabuleiro[x][y] = 'X';
+                vez.setText("Não é sua vez");
+            }
+
+            lb3.setText(printarChar());
+       // }
     }//GEN-LAST:event_fogoActionPerformed
 
     private void novoJogo(Boolean pronto){
@@ -501,7 +528,7 @@ public class GameInterface extends javax.swing.JFrame {
             String m= "";
             for(i=0;i<tam;i++){
                 for(j=0; j<tam; j++){
-                    tabuleiro[i][j] = 219;
+                    tabuleiro[i][j] = '0';
                     m += String.valueOf(tabuleiro[i][j])+"  ";
                 }
                 m+="\n";
@@ -593,6 +620,7 @@ public class GameInterface extends javax.swing.JFrame {
     private javax.swing.JRadioButton portaaviao;
     private javax.swing.JPanel root;
     private javax.swing.JRadioButton submarino;
+    private javax.swing.JLabel vez;
     private javax.swing.JTextField x;
     private javax.swing.JTextField x1;
     private javax.swing.JTextField y;

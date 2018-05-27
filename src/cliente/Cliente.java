@@ -141,7 +141,7 @@ public class Cliente implements Runnable{
                 JOptionPane.showMessageDialog(null,"Não é Sua vez de Jogar!");
                 return null;
             }
-            
+//            
             saida.writeInt(Mensagem.coordenadas);
             saida.writeInt(x);
             saida.writeInt(y);
@@ -162,7 +162,7 @@ public class Cliente implements Runnable{
         return 0;
     }
     
-    private Boolean verificarVez(){
+    public Boolean verificarVez(){
         try {
             saida.writeInt(Mensagem.jogarAguardar);
             return entrada.readInt() == Mensagem.jogar;
