@@ -6,8 +6,7 @@
 package game;
 
 import controlador.Controlador;
-import java.io.IOException;
-import javax.swing.JTextField;
+import controlador.ControladorUI;
 
 /**
  *
@@ -44,6 +43,7 @@ public class GameLogin extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel2.setText("Nome de Usuário:");
 
@@ -177,13 +177,16 @@ public class GameLogin extends javax.swing.JFrame {
         String user = nome.getText();
         
         Controlador control = new Controlador();
-        if(control.conectar(endIp, socket, user))
-        {
-            GameInterface game = new GameInterface();
-            game.setLocationRelativeTo(null);
-            game.setVisible(true);
+        //if(control.conectar(endIp, socket, user))
+        //{
+        control.conectar(endIp, socket, user);
+            ControladorUI ui = new ControladorUI();
+            ui.abrirInterface();
+//            GameInterface game = new GameInterface();
+//            game.setLocationRelativeTo(null);
+//            game.setVisible(true);
             this.setVisible(false);
-        }
+        //}
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void portaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portaActionPerformed

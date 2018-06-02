@@ -5,20 +5,20 @@
  */
 package controlador;
 
-import cliente.Cliente;
+import cliente.TrataServidor;
 
 /**
  *
  * @author gabriel
  */
 public class Controlador {
-    public static Cliente game = new Cliente();
+    public static TrataServidor game = new TrataServidor();
     
-    public Boolean conectar(String ip, int porta, String user){
-        return game.conectar(ip, porta, user);
+    public void conectar(String ip, int porta, String user){
+        game.conectar(ip, porta, user);
     }
-    public Boolean fila(){
-        return game.fila();
+    public void fila(){
+        game.fila();
     }
     public void desconectar(){
         game.desconectar();
@@ -31,15 +31,23 @@ public class Controlador {
         game.apontar(x,y, tipo);
     }
     
-    public Boolean toPronto(){
-        return game.toPronto();
+    public void toPronto(){
+        game.toPronto();
     }
     
-    public Integer fogo(int x, int y){
-        return game.fogo(x,y);
+    public void fogo(int x, int y){
+        game.fogo(x,y);
     }
     
-    public Boolean verificarVez(){
-        return game.verificarVez();
+    public void verificarVez(){
+        game.verificarVez();
+    }
+    
+    public void sairFila(){
+        game.sairFila();
+    }
+    
+    public void abandonarPartida(){
+        game.abandonarPartida();
     }
 }
