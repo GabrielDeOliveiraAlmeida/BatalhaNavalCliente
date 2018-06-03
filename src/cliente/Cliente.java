@@ -5,7 +5,6 @@
  */
 package cliente;
 
-import game.GameInterface;
 import game.GameLogin;
 
 /**
@@ -16,7 +15,6 @@ public class Cliente {
 
     public static void main(String[] args) {
 
-        // TODO code application logic here
         GameLogin log = new GameLogin();
         log.setLocationRelativeTo(null);
         log.setVisible(true);

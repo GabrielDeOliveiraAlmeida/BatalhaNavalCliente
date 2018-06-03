@@ -7,7 +7,6 @@ package game;
 
 import controlador.Controlador;
 import controlador.ControladorUI;
-
 /**
  *
  * @author gabriel
