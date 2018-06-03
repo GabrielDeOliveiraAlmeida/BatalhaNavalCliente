@@ -6,17 +6,15 @@
 package game;
 
 import controlador.Controlador;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.CardLayout;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
 import respostas.Mensagem;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
 /**
  *
@@ -44,7 +42,7 @@ public class GameInterface extends javax.swing.JFrame {
         vit =0;
         der =0;
         c = (CardLayout) root.getLayout();
-
+        audio();
     }
 
     /**
@@ -505,6 +503,20 @@ public class GameInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+        private void audio(){
+        AudioClip s;
+        try{
+            //System.out.println("oi");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("som.wav").getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.loop(1000);
+          //  s = Applet.newAudioClip(getClass().getResource("som.wav"));
+          //  s.loop();
+        }catch(Exception e){
+            System.out.println("ERRO");
+        }
+        }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 //        Carregando load = new Carregando(this, false);
