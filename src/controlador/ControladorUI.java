@@ -16,7 +16,7 @@ public class ControladorUI {
     public static GameInterface iu = new GameInterface();
 
     public void prontoParaJogar() {
-        iu.prontoParaJogar();
+        iu.prontoPosicionar();
     }
 
     public void novoJogo(){
@@ -45,6 +45,14 @@ public class ControladorUI {
     
     public void passarVez(){
         iu.passarVez();
+    }
+    
+    public void atingido(){
+        iu.atingido();
+    }
+    
+    public void setVez(){
+        iu.setVez();
     }
 }
 

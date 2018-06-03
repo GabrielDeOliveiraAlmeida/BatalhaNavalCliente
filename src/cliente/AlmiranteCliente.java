@@ -68,7 +68,7 @@ public class AlmiranteCliente {
             saida.close();
             System.out.println("Cliente desconectado");
             return true;
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
             return false;
         }

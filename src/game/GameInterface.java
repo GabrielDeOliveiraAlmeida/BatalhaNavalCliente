@@ -6,13 +6,15 @@
 package game;
 
 import controlador.Controlador;
-import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.CardLayout;
 import java.io.File;
+import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 import respostas.Mensagem;
 
@@ -25,8 +27,8 @@ public class GameInterface extends javax.swing.JFrame {
     private Controlador control = new Controlador();
     private int barcos;
     private CardLayout c;
-    private int vit,der;
-    
+    private int vit, der;
+
     /**
      * Creates new form GameInterface
      */
@@ -34,15 +36,20 @@ public class GameInterface extends javax.swing.JFrame {
     static int mat[][] = new int[10][10];
     static char tabuleiro[][] = new char[10][10];
     int tam = 10;
-    
-    public GameInterface(){
+    public Clip clip;
+    AudioInputStream audioInputStream;
+    AudioInputStream audioaiai;
+    Clip clipaiai;
+
+    public GameInterface() {
         initComponents();
         barcos = 0;
         vitoriaderrota.setText("0/0");
-        vit =0;
-        der =0;
+        vit = 0;
+        der = 0;
         c = (CardLayout) root.getLayout();
         audio();
+        clip.loop(1000);
     }
 
     /**
@@ -503,36 +510,57 @@ public class GameInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-        private void audio(){
-        AudioClip s;
-        try{
-            //System.out.println("oi");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("som.wav").getAbsoluteFile());
-            Clip clip = AudioSystem.getClip();
+    private void audio() {
+        try {
+            audioInputStream = AudioSystem.getAudioInputStream(new File("som.wav").getAbsoluteFile());
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            clip.loop(1000);
-          //  s = Applet.newAudioClip(getClass().getResource("som.wav"));
-          //  s.loop();
-        }catch(Exception e){
+            audioaiai = AudioSystem.getAudioInputStream(new File("aiai.wav").getAbsoluteFile());
+            clipaiai = AudioSystem.getClip();
+            clipaiai.open(audioaiai);
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
             System.out.println("ERRO");
         }
-        }
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 //        Carregando load = new Carregando(this, false);
 //        load.setVisible(true);
         control.fila();
         c.show(root, "fila");
-        //   prontoParaJogar();
+        //   prontoPosicionar();
         //load.dispose();
 
         //       }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void prontoParaJogar() {
+    public void reset() {
+        barcos = 0;
+        c1 = 0; 
+        c2 = 0; 
+        c3 = 0;
+        int i, j, p = 0, q = 0;
+        for (i = 0; i < tam; i++) {
+            for (j = 0; j < tam; j++) {
+                //tabuleiro[i][j]='O';
+                mat[i][j]=0;
+//                if (i == 0) {
+//                    mat[i][j] = p;
+//                    p++;
+//                }
+//                if (j == 0) {
+//                    mat[i][j] = q;
+//                    q++;
+//                }
+            }
+        }
+    }
+
+    public void prontoPosicionar() {
         c.show(root, "posicionar");
         //System.out.println("Olá");
+        reset();
         lb1.setText(printar());
         lb2.setVisible(false);
     }
@@ -705,7 +733,7 @@ public class GameInterface extends javax.swing.JFrame {
         //System.out.println("Abondonar");
         control.abandonarPartida();
         der++;
-        vitoriaderrota.setText(String.valueOf(vit)+"/"+String.valueOf(der));
+        vitoriaderrota.setText(String.valueOf(vit) + "/" + String.valueOf(der));
         c.show(root, "inicio");
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -713,7 +741,7 @@ public class GameInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
         control.abandonarPartida();
         der++;
-         vitoriaderrota.setText(String.valueOf(vit)+"/"+String.valueOf(der));
+        vitoriaderrota.setText(String.valueOf(vit) + "/" + String.valueOf(der));
         c.show(root, "inicio");
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -721,9 +749,9 @@ public class GameInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
         control.abandonarPartida();
         der++;
-        vitoriaderrota.setText(String.valueOf(vit)+"/"+String.valueOf(der));
+        vitoriaderrota.setText(String.valueOf(vit) + "/" + String.valueOf(der));
         c.show(root, "inicio");
-        
+
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
@@ -734,14 +762,19 @@ public class GameInterface extends javax.swing.JFrame {
         c.show(root, "novojogo");
         int i, j;
         String m = "";
+        //String matriz="";
         for (i = 0; i < tam; i++) {
             for (j = 0; j < tam; j++) {
                 tabuleiro[i][j] = '0';
+                //mat[i][j]=0;
                 m += String.valueOf(tabuleiro[i][j]) + "  ";
+                //matriz+=String.valueOf(mat[i][j]) + "  ";
             }
             m += "\n";
+           // matriz+="\n";
         }
         lb3.setText(m);
+        //lb1.setText(matriz);
         lb4.setText(lb1.getText());
 
     }
@@ -759,22 +792,24 @@ public class GameInterface extends javax.swing.JFrame {
     }
 
     public void vitorioso(int i) {
-        if(i == 2){
+        if (i == 2) {
             vit++;
             JOptionPane.showMessageDialog(this, "01 Desistiu!");
-        }
-        else if( i == 1){
+        } else if (i == 1) {
             vit++;
+            this.clip.stop();
+            clipaiai.start();
+            this.clip.loop(1000);
             JOptionPane.showMessageDialog(this, "Você venceu!");
         }
-         vitoriaderrota.setText(String.valueOf(vit)+"/"+String.valueOf(der));
+        vitoriaderrota.setText(String.valueOf(vit) + "/" + String.valueOf(der));
         c.show(root, "inicio");
     }
-    
-    public void fracasso(){
+
+    public void fracasso() {
         der++;
         JOptionPane.showMessageDialog(this, "Você Perdeu!");
-         vitoriaderrota.setText(String.valueOf(vit)+"/"+String.valueOf(der));
+        vitoriaderrota.setText(String.valueOf(vit) + "/" + String.valueOf(der));
         c.show(root, "inicio");
     }
 
@@ -802,11 +837,11 @@ public class GameInterface extends javax.swing.JFrame {
         lb3.setText(printarChar());
     }
 
-    public void aguarde(){
+    public void aguarde() {
         vez.setText("Não é sua vez");
     }
-    
-    public void atirar(){
+
+    public void atirar() {
         int x, y;
         try {
             x = Integer.parseInt(x1.getText());
@@ -821,13 +856,24 @@ public class GameInterface extends javax.swing.JFrame {
         }
         if (tabuleiro[x][y] == 'O' || tabuleiro[x][y] == 'X') {
             alerta.setText("Campo já atingido");
-            return;
+        } else {
+            vez.setText("FOGO");
+            control.fogo(x, y);
         }
-       vez.setText("FOGO");
-       control.fogo(x ,y);
     }
-    
-    public void passarVez(){
+
+    public void passarVez() {
+        vez.setText("Sua vez de Jogar!");
+    }
+
+    public void atingido() {
+        alerta.setText("Fomos Atingido!");
+        this.clip.stop();
+        clipaiai.start();
+        this.clip.loop(1000);
+    }
+
+    public void setVez(){
         vez.setText("Sua vez de Jogar!");
     }
     /**
@@ -862,19 +908,6 @@ public class GameInterface extends javax.swing.JFrame {
             @Override
             public void run() {
                 new GameInterface().setVisible(true);
-                int i, j, p = 0, q = 0;
-                for (i = 0; i < 10; i++) {
-                    for (j = 0; j < 10; j++) {
-                        if (i == 0) {
-                            mat[i][j] = p;
-                            p++;
-                        }
-                        if (j == 0) {
-                            mat[i][j] = q;
-                            q++;
-                        }
-                    }
-                }
             }
         });
     }

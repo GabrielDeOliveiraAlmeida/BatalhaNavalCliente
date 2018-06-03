@@ -6,15 +6,6 @@
 package cliente;
 
 import controlador.ControladorUI;
-import java.awt.HeadlessException;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import respostas.Mensagem;
 
 /**
@@ -57,10 +48,7 @@ public class TrataServidor implements Runnable {
         switch (code) {
             case Mensagem.filaSucesso:
                 //System.out.println("Mensagem para JOGAR (Oponente Encontrado) recebida de: " + this.socket.getInetAddress().getHostAddress());
-                prontoParaJogar();
-                break;
-            case Mensagem.fila:
-                
+                prontoPosicionar();
                 break;
             case Mensagem.vencedor:
                 vitorioso(1);
@@ -83,10 +71,12 @@ public class TrataServidor implements Runnable {
             case Mensagem.coordenadasInimigo:
                 coordInimigo();
                 break;
+            case Mensagem.atingido:
+                atingido();
             case Mensagem.jogarAguardar:
                 aguarde();
                 break;
-            case Mensagem.jogar:
+            case Mensagem.jogarSeuTurno:
                 atirar();
                 break;
             case Mensagem.passarVez:
@@ -96,6 +86,9 @@ public class TrataServidor implements Runnable {
         }
     }
 
+    public void atingido(){
+        ControladorUI.iu.atingido();
+    }
     public void coordInimigo() {
         int x;
         int y;
@@ -126,8 +119,8 @@ public class TrataServidor implements Runnable {
 
     }
 
-    public void prontoParaJogar() {
-        ControladorUI.iu.prontoParaJogar();
+    public void prontoPosicionar() {
+        ControladorUI.iu.prontoPosicionar();
     }
 
     public void vitorioso(int i) {
@@ -199,6 +192,7 @@ public class TrataServidor implements Runnable {
     }
     
     public void atirar(){
+        ControladorUI.iu.setVez();
         ControladorUI.iu.atirar();
     }
 
