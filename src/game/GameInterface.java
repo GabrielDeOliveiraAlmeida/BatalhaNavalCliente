@@ -689,7 +689,7 @@ public class GameInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void verificaPronto() {
-        if (barcos == Mensagem.NUMEROPOSTOTAL) {
+        if (barcos == Mensagem.NUMEROBARCOSTOTAL) {
             lb1.setText(printar());
             control.toPronto();
             c.show(root, "aguarde");
